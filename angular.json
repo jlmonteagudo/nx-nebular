@@ -1,0 +1,141 @@
+{
+  "version": 1,
+  "projects": {
+    "blog-admin": {
+      "projectType": "application",
+      "schematics": {
+        "@nrwl/angular:component": {
+          "style": "scss"
+        }
+      },
+      "root": "apps/blog-admin",
+      "sourceRoot": "apps/blog-admin/src",
+      "prefix": "blog",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:browser",
+          "options": {
+            "outputPath": "dist/apps/blog-admin",
+            "index": "apps/blog-admin/src/index.html",
+            "main": "apps/blog-admin/src/main.ts",
+            "polyfills": "apps/blog-admin/src/polyfills.ts",
+            "tsConfig": "apps/blog-admin/tsconfig.app.json",
+            "aot": false,
+            "assets": [
+              "apps/blog-admin/src/favicon.ico",
+              "apps/blog-admin/src/assets"
+            ],
+            "styles": ["apps/blog-admin/src/styles.scss"],
+            "scripts": []
+          },
+          "configurations": {
+            "production": {
+              "fileReplacements": [
+                {
+                  "replace": "apps/blog-admin/src/environments/environment.ts",
+                  "with": "apps/blog-admin/src/environments/environment.prod.ts"
+                }
+              ],
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "extractCss": true,
+              "namedChunks": false,
+              "aot": true,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "2mb",
+                  "maximumError": "5mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "6kb",
+                  "maximumError": "10kb"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "builder": "@angular-devkit/build-angular:dev-server",
+          "options": {
+            "browserTarget": "blog-admin:build"
+          },
+          "configurations": {
+            "production": {
+              "browserTarget": "blog-admin:build:production"
+            }
+          }
+        },
+        "extract-i18n": {
+          "builder": "@angular-devkit/build-angular:extract-i18n",
+          "options": {
+            "browserTarget": "blog-admin:build"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "apps/blog-admin/tsconfig.app.json",
+              "apps/blog-admin/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!apps/blog-admin/**"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "apps/blog-admin/jest.config.js",
+            "tsConfig": "apps/blog-admin/tsconfig.spec.json",
+            "setupFile": "apps/blog-admin/src/test-setup.ts"
+          }
+        }
+      }
+    },
+    "blog-admin-e2e": {
+      "root": "apps/blog-admin-e2e",
+      "sourceRoot": "apps/blog-admin-e2e/src",
+      "projectType": "application",
+      "architect": {
+        "e2e": {
+          "builder": "@nrwl/cypress:cypress",
+          "options": {
+            "cypressConfig": "apps/blog-admin-e2e/cypress.json",
+            "tsConfig": "apps/blog-admin-e2e/tsconfig.e2e.json",
+            "devServerTarget": "blog-admin:serve"
+          },
+          "configurations": {
+            "production": {
+              "devServerTarget": "blog-admin:serve:production"
+            }
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": ["apps/blog-admin-e2e/tsconfig.e2e.json"],
+            "exclude": ["**/node_modules/**", "!apps/blog-admin-e2e/**"]
+          }
+        }
+      }
+    }
+  },
+  "cli": {
+    "defaultCollection": "@nrwl/angular"
+  },
+  "schematics": {
+    "@nrwl/angular:application": {
+      "unitTestRunner": "jest",
+      "e2eTestRunner": "cypress"
+    },
+    "@nrwl/angular:library": {
+      "unitTestRunner": "jest"
+    }
+  },
+  "defaultProject": "blog-admin"
+}
